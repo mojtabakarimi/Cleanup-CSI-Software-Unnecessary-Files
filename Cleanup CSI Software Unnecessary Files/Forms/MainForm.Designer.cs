@@ -30,6 +30,7 @@
         {
             this.BrowseButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkCSIBridge = new System.Windows.Forms.CheckBox();
             this.chkETABS = new System.Windows.Forms.CheckBox();
             this.chkSAFE = new System.Windows.Forms.CheckBox();
             this.chkSAP2000 = new System.Windows.Forms.CheckBox();
@@ -66,6 +67,7 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.chkCSIBridge);
             this.groupBox1.Controls.Add(this.chkETABS);
             this.groupBox1.Controls.Add(this.chkSAFE);
             this.groupBox1.Controls.Add(this.chkSAP2000);
@@ -80,6 +82,17 @@
             this.groupBox1.Size = new System.Drawing.Size(822, 426);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
+            // 
+            // chkCSIBridge
+            // 
+            this.chkCSIBridge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkCSIBridge.AutoSize = true;
+            this.chkCSIBridge.Location = new System.Drawing.Point(716, 166);
+            this.chkCSIBridge.Name = "chkCSIBridge";
+            this.chkCSIBridge.Size = new System.Drawing.Size(76, 17);
+            this.chkCSIBridge.TabIndex = 7;
+            this.chkCSIBridge.Text = "CSI Bridge";
+            this.chkCSIBridge.UseVisualStyleBackColor = true;
             // 
             // chkETABS
             // 
@@ -118,7 +131,7 @@
             // 
             this.DeleteAllButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.DeleteAllButton.Enabled = false;
-            this.DeleteAllButton.Location = new System.Drawing.Point(716, 218);
+            this.DeleteAllButton.Location = new System.Drawing.Point(716, 282);
             this.DeleteAllButton.Name = "DeleteAllButton";
             this.DeleteAllButton.Size = new System.Drawing.Size(100, 23);
             this.DeleteAllButton.TabIndex = 4;
@@ -141,7 +154,7 @@
             // 
             this.CheckButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.CheckButton.Enabled = false;
-            this.CheckButton.Location = new System.Drawing.Point(716, 189);
+            this.CheckButton.Location = new System.Drawing.Point(716, 253);
             this.CheckButton.Name = "CheckButton";
             this.CheckButton.Size = new System.Drawing.Size(100, 23);
             this.CheckButton.TabIndex = 2;
@@ -271,6 +284,7 @@
         private System.Windows.Forms.CheckBox chkSAP2000;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.CheckBox chkCSIBridge;
     }
 }
 

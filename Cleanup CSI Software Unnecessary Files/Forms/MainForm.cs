@@ -15,6 +15,7 @@ namespace CSICleanup.Forms
         private readonly string[] sapExtensions = { "ico", "msh", "tlog", "OUT", "sbk", "K~0", "K~I", "K~J", "K~M", "tlog", "Y", "Y$$", "Y~", "Y~1", "Y00", "Y01", "Y02", "Y03", "Y04", "Y05", "Y06", "Y07", "Y08", "C3", "F3", "K", "K3", "M3", "K~E", "K~G", "tlog" };
         private readonly string[] safeExtensions = { "ico", "K~0", "K~I", "K~J", "K~L", "K~M", "LOG", "msh", "OUT", "xsdm", "Y", "Y$$", "Y~", "Y~1", "Y00", "Y0A", "Y0B", "Y01", "Y02", "Y03", "Y05", "Y06", "Y07", "Y08", "Y09" };
         private readonly string[] etabsExtensions = {"ebk", "ico", "K~0", "K~E", "K~G", "K~I", "K~J", "K~M", "LOG", "msh", "OUT", "Y", "Y$$", "Y~", "Y~1", "Y00", "Y0A", "Y01", "Y02", "Y03", "Y04", "Y05", "Y06", "Y07", "Y08", "Y09"};
+        private readonly string[] csiBridgeExtensions = {  };
 
         public MainForm()
         {
@@ -23,11 +24,6 @@ namespace CSICleanup.Forms
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            //var tt = Clipboard.GetFileDropList();
-
-            //var ttt = string.Join("\r\n", tt.Cast<object>().ToArray());
-            //Clipboard.SetText(ttt);
-            
             var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             this.Text = $@"{Application.ProductName} - v.{version.Major}.{version.Minor}.{version.Build}";
         }
@@ -55,31 +51,30 @@ namespace CSICleanup.Forms
         {
             pathListBox.Items.Clear();
 
-            var softwares = new List<string>();
-            var extensions = new List<string>();
+            var software = new Dictionary<string, string[]>();
+
             if (chkSAP2000.Checked)
             {
-                softwares.Add(".sdb");
-                extensions.AddRange(sapExtensions);
+                software.Add(".sdb", sapExtensions);
             }
             if (chkETABS.Checked)
             {
-                softwares.Add(".edb");
-                extensions.AddRange(etabsExtensions);
+                software.Add(".edb", etabsExtensions);
             }
             if (chkSAFE.Checked)
             {
-                softwares.Add(".fdb");
-                extensions.AddRange(safeExtensions);
+                software.Add(".fdb", safeExtensions);
+            }
+            if (chkCSIBridge.Checked)
+            {
+                //todo: add extensions of CSI Bridge
             }
 
-            if (softwares.Count == 0)
+            if (software.Count == 0)
             {
                 MessageBox.Show("Please select at least one of the softwares", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 return;
             }
-
-            extensions = extensions.Distinct().ToList();
 
             var path = PathTextBox.Text;
             if (!path.EndsWith(System.IO.Path.DirectorySeparatorChar.ToString()))
@@ -87,7 +82,7 @@ namespace CSICleanup.Forms
                 path += System.IO.Path.DirectorySeparatorChar.ToString();
             }
 
-            var searchedFiles = SearchAllFiles(path, softwares.ToArray());
+            var searchedFiles = SearchAllFiles(path, software.Keys.ToArray(), true);
 
             potentialFiles = new List<string>();
             foreach (var file in searchedFiles)
@@ -103,12 +98,15 @@ namespace CSICleanup.Forms
                 }
                 pureName += System.IO.Path.GetFileNameWithoutExtension(file);
 
-                foreach (var ext in extensions)
+                foreach (var item in software)
                 {
-                    var fileName = $"{pureName}.{ext}";
-                    if (System.IO.File.Exists(fileName))
+                    foreach (var extension in item.Value)
                     {
-                        potentialFiles.Add(fileName);
+                        var fileName = $"{pureName}.{extension}";
+                        if (System.IO.File.Exists(fileName))
+                        {
+                            potentialFiles.Add(fileName);
+                        }
                     }
                 }
             }
@@ -116,7 +114,7 @@ namespace CSICleanup.Forms
             var totalSize = potentialFiles.Sum(t => new System.IO.FileInfo(t).Length);
             pathListBox.Items.AddRange(potentialFiles.Cast<object>().ToArray());
 
-            MessageBox.Show($@"{potentialFiles.Count} files (total size : {totalSize / 1024.0 / 1024.0:F2} MB) found", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show($"Number of files: {potentialFiles.Count}\r\nTotal size: {totalSize / 1024.0 / 1024.0:F2} MB", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             DeleteAllButton.Enabled = totalSize > 0;
         }
